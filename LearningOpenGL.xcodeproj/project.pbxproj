@@ -11,17 +11,32 @@
 		77B8D4931F6BC57A00D8E800 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77B8D4921F6BC57A00D8E800 /* OpenGL.framework */; };
 		77B8D4951F6BC60200D8E800 /* libGLEW.2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 77B8D4941F6BC60200D8E800 /* libGLEW.2.1.0.dylib */; };
 		77B8D4971F6BC62000D8E800 /* libglfw.3.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 77B8D4961F6BC62000D8E800 /* libglfw.3.2.dylib */; };
+		77B8D4BD1F6C4A9000D8E800 /* etc1_utils.c in Sources */ = {isa = PBXBuildFile; fileRef = 77B8D4A81F6C4A9000D8E800 /* etc1_utils.c */; };
+		77B8D4BE1F6C4A9000D8E800 /* image_DXT.c in Sources */ = {isa = PBXBuildFile; fileRef = 77B8D4AA1F6C4A9000D8E800 /* image_DXT.c */; };
+		77B8D4BF1F6C4A9000D8E800 /* image_helper.c in Sources */ = {isa = PBXBuildFile; fileRef = 77B8D4AC1F6C4A9000D8E800 /* image_helper.c */; };
+		77B8D4C01F6C4A9000D8E800 /* SOIL2.c in Sources */ = {isa = PBXBuildFile; fileRef = 77B8D4B11F6C4A9000D8E800 /* SOIL2.c */; };
+		77B8D4C11F6C4AD700D8E800 /* resources in CopyFiles */ = {isa = PBXBuildFile; fileRef = 77B8D4A01F6C27EC00D8E800 /* resources */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		77B8D4851F6BC49F00D8E800 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
+			dstPath = /usr/share/man/man1;
 			dstSubfolderSpec = 0;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 1;
+		};
+		77B8D49C1F6C26AC00D8E800 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				77B8D4C11F6C4AD700D8E800 /* resources in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -31,6 +46,29 @@
 		77B8D4921F6BC57A00D8E800 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		77B8D4941F6BC60200D8E800 /* libGLEW.2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.1.0.dylib; path = ../../../../usr/local/Cellar/glew/2.1.0/lib/libGLEW.2.1.0.dylib; sourceTree = "<group>"; };
 		77B8D4961F6BC62000D8E800 /* libglfw.3.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.2.dylib; path = ../../../../usr/local/Cellar/glfw/3.2.1/lib/libglfw.3.2.dylib; sourceTree = "<group>"; };
+		77B8D49A1F6C01DF00D8E800 /* shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = shader.h; sourceTree = "<group>"; };
+		77B8D4A01F6C27EC00D8E800 /* resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = resources; sourceTree = "<group>"; };
+		77B8D4A81F6C4A9000D8E800 /* etc1_utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = etc1_utils.c; path = SOIL2/etc1_utils.c; sourceTree = "<group>"; };
+		77B8D4A91F6C4A9000D8E800 /* etc1_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = etc1_utils.h; path = SOIL2/etc1_utils.h; sourceTree = "<group>"; };
+		77B8D4AA1F6C4A9000D8E800 /* image_DXT.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = image_DXT.c; path = SOIL2/image_DXT.c; sourceTree = "<group>"; };
+		77B8D4AB1F6C4A9000D8E800 /* image_DXT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = image_DXT.h; path = SOIL2/image_DXT.h; sourceTree = "<group>"; };
+		77B8D4AC1F6C4A9000D8E800 /* image_helper.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = image_helper.c; path = SOIL2/image_helper.c; sourceTree = "<group>"; };
+		77B8D4AD1F6C4A9000D8E800 /* image_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = image_helper.h; path = SOIL2/image_helper.h; sourceTree = "<group>"; };
+		77B8D4AE1F6C4A9000D8E800 /* jo_jpeg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jo_jpeg.h; path = SOIL2/jo_jpeg.h; sourceTree = "<group>"; };
+		77B8D4AF1F6C4A9000D8E800 /* pkm_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pkm_helper.h; path = SOIL2/pkm_helper.h; sourceTree = "<group>"; };
+		77B8D4B01F6C4A9000D8E800 /* pvr_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pvr_helper.h; path = SOIL2/pvr_helper.h; sourceTree = "<group>"; };
+		77B8D4B11F6C4A9000D8E800 /* SOIL2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = SOIL2.c; path = SOIL2/SOIL2.c; sourceTree = "<group>"; };
+		77B8D4B21F6C4A9000D8E800 /* SOIL2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOIL2.h; path = SOIL2/SOIL2.h; sourceTree = "<group>"; };
+		77B8D4B31F6C4A9000D8E800 /* stb_image_write.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stb_image_write.h; path = SOIL2/stb_image_write.h; sourceTree = "<group>"; };
+		77B8D4B41F6C4A9000D8E800 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stb_image.h; path = SOIL2/stb_image.h; sourceTree = "<group>"; };
+		77B8D4B51F6C4A9000D8E800 /* stbi_DDS_c.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stbi_DDS_c.h; path = SOIL2/stbi_DDS_c.h; sourceTree = "<group>"; };
+		77B8D4B61F6C4A9000D8E800 /* stbi_DDS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stbi_DDS.h; path = SOIL2/stbi_DDS.h; sourceTree = "<group>"; };
+		77B8D4B71F6C4A9000D8E800 /* stbi_ext_c.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stbi_ext_c.h; path = SOIL2/stbi_ext_c.h; sourceTree = "<group>"; };
+		77B8D4B81F6C4A9000D8E800 /* stbi_ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stbi_ext.h; path = SOIL2/stbi_ext.h; sourceTree = "<group>"; };
+		77B8D4B91F6C4A9000D8E800 /* stbi_pkm_c.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stbi_pkm_c.h; path = SOIL2/stbi_pkm_c.h; sourceTree = "<group>"; };
+		77B8D4BA1F6C4A9000D8E800 /* stbi_pkm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stbi_pkm.h; path = SOIL2/stbi_pkm.h; sourceTree = "<group>"; };
+		77B8D4BB1F6C4A9000D8E800 /* stbi_pvr_c.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stbi_pvr_c.h; path = SOIL2/stbi_pvr_c.h; sourceTree = "<group>"; };
+		77B8D4BC1F6C4A9000D8E800 /* stbi_pvr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stbi_pvr.h; path = SOIL2/stbi_pvr.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,7 +105,10 @@
 		77B8D4891F6BC49F00D8E800 /* LearningOpenGL */ = {
 			isa = PBXGroup;
 			children = (
+				77B8D4A71F6C4A7B00D8E800 /* SOIL2 */,
+				77B8D4A01F6C27EC00D8E800 /* resources */,
 				77B8D48A1F6BC49F00D8E800 /* main.cpp */,
+				77B8D49A1F6C01DF00D8E800 /* shader.h */,
 			);
 			path = LearningOpenGL;
 			sourceTree = "<group>";
@@ -82,6 +123,34 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		77B8D4A71F6C4A7B00D8E800 /* SOIL2 */ = {
+			isa = PBXGroup;
+			children = (
+				77B8D4A81F6C4A9000D8E800 /* etc1_utils.c */,
+				77B8D4A91F6C4A9000D8E800 /* etc1_utils.h */,
+				77B8D4AA1F6C4A9000D8E800 /* image_DXT.c */,
+				77B8D4AB1F6C4A9000D8E800 /* image_DXT.h */,
+				77B8D4AC1F6C4A9000D8E800 /* image_helper.c */,
+				77B8D4AD1F6C4A9000D8E800 /* image_helper.h */,
+				77B8D4AE1F6C4A9000D8E800 /* jo_jpeg.h */,
+				77B8D4AF1F6C4A9000D8E800 /* pkm_helper.h */,
+				77B8D4B01F6C4A9000D8E800 /* pvr_helper.h */,
+				77B8D4B11F6C4A9000D8E800 /* SOIL2.c */,
+				77B8D4B21F6C4A9000D8E800 /* SOIL2.h */,
+				77B8D4B31F6C4A9000D8E800 /* stb_image_write.h */,
+				77B8D4B41F6C4A9000D8E800 /* stb_image.h */,
+				77B8D4B51F6C4A9000D8E800 /* stbi_DDS_c.h */,
+				77B8D4B61F6C4A9000D8E800 /* stbi_DDS.h */,
+				77B8D4B71F6C4A9000D8E800 /* stbi_ext_c.h */,
+				77B8D4B81F6C4A9000D8E800 /* stbi_ext.h */,
+				77B8D4B91F6C4A9000D8E800 /* stbi_pkm_c.h */,
+				77B8D4BA1F6C4A9000D8E800 /* stbi_pkm.h */,
+				77B8D4BB1F6C4A9000D8E800 /* stbi_pvr_c.h */,
+				77B8D4BC1F6C4A9000D8E800 /* stbi_pvr.h */,
+			);
+			name = SOIL2;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -92,6 +161,7 @@
 				77B8D4831F6BC49F00D8E800 /* Sources */,
 				77B8D4841F6BC49F00D8E800 /* Frameworks */,
 				77B8D4851F6BC49F00D8E800 /* CopyFiles */,
+				77B8D49C1F6C26AC00D8E800 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -140,7 +210,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				77B8D4BD1F6C4A9000D8E800 /* etc1_utils.c in Sources */,
+				77B8D4BF1F6C4A9000D8E800 /* image_helper.c in Sources */,
 				77B8D48B1F6BC49F00D8E800 /* main.cpp in Sources */,
+				77B8D4C01F6C4A9000D8E800 /* SOIL2.c in Sources */,
+				77B8D4BE1F6C4A9000D8E800 /* image_DXT.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
