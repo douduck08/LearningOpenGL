@@ -29,7 +29,13 @@ bool keys[1024];
 bool firstMouse = true;
 
 // Light attributes
-glm::vec3 lightPos( 1.2f, 1.0f, 2.0f );
+glm::vec3 dirLightDir(-0.2f, -1.0f, -0.3f);
+glm::vec3 pointLightPos[] = {
+    glm::vec3(  0.7f,  0.2f,  2.0f      ),
+    glm::vec3(  2.3f, -3.3f, -4.0f      ),
+    glm::vec3(  -4.0f,  2.0f, -12.0f    ),
+    glm::vec3(  0.0f,  0.0f, -3.0f      )
+};
 
 GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
@@ -91,47 +97,61 @@ int main( )
     Shader lampShader( "resources/shaders/lamp.vert", "resources/shaders/lamp.frag" );
     
     GLfloat vertices[] = {
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-        0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-        0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-        0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+        // Positions            // Normals              // Texture Coords
+        -0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,     0.0f,  0.0f,
+        0.5f, -0.5f, -0.5f,     0.0f,  0.0f, -1.0f,     1.0f,  0.0f,
+        0.5f,  0.5f, -0.5f,     0.0f,  0.0f, -1.0f,     1.0f,  1.0f,
+        0.5f,  0.5f, -0.5f,     0.0f,  0.0f, -1.0f,     1.0f,  1.0f,
+        -0.5f,  0.5f, -0.5f,    0.0f,  0.0f, -1.0f,     0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,     0.0f,  0.0f,
         
-        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-        0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-        0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-        0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,    0.0f,  0.0f,  1.0f,     0.0f,  0.0f,
+        0.5f, -0.5f,  0.5f,     0.0f,  0.0f,  1.0f,     1.0f,  0.0f,
+        0.5f,  0.5f,  0.5f,     0.0f,  0.0f,  1.0f,     1.0f,  1.0f,
+        0.5f,  0.5f,  0.5f,     0.0f,  0.0f,  1.0f,  	1.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f,    0.0f,  0.0f,  1.0f,     0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,    0.0f,  0.0f,  1.0f,     0.0f,  0.0f,
         
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,    -1.0f,  0.0f,  0.0f,    1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,    -1.0f,  0.0f,  0.0f,    1.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f,    -1.0f,  0.0f,  0.0f,    0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f,    -1.0f,  0.0f,  0.0f,    0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,    -1.0f,  0.0f,  0.0f,    0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,    -1.0f,  0.0f,  0.0f,    1.0f,  0.0f,
         
-        0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-        0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-        0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-        0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-        0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-        0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+        0.5f,  0.5f,  0.5f,     1.0f,  0.0f,  0.0f,     1.0f,  0.0f,
+        0.5f,  0.5f, -0.5f,     1.0f,  0.0f,  0.0f,     1.0f,  1.0f,
+        0.5f, -0.5f, -0.5f,     1.0f,  0.0f,  0.0f,     0.0f,  1.0f,
+        0.5f, -0.5f, -0.5f,     1.0f,  0.0f,  0.0f,     0.0f,  1.0f,
+        0.5f, -0.5f,  0.5f,     1.0f,  0.0f,  0.0f,     0.0f,  0.0f,
+        0.5f,  0.5f,  0.5f,     1.0f,  0.0f,  0.0f,     1.0f,  0.0f,
         
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-        0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-        0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-        0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,    0.0f, -1.0f,  0.0f,     0.0f,  1.0f,
+        0.5f, -0.5f, -0.5f,     0.0f, -1.0f,  0.0f,     1.0f,  1.0f,
+        0.5f, -0.5f,  0.5f,     0.0f, -1.0f,  0.0f,     1.0f,  0.0f,
+        0.5f, -0.5f,  0.5f,     0.0f, -1.0f,  0.0f,     1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,    0.0f, -1.0f,  0.0f,     0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,    0.0f, -1.0f,  0.0f,     0.0f,  1.0f,
         
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-        0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-        0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-        0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+        -0.5f,  0.5f, -0.5f,    0.0f,  1.0f,  0.0f,     0.0f,  1.0f,
+        0.5f,  0.5f, -0.5f,     0.0f,  1.0f,  0.0f,     1.0f,  1.0f,
+        0.5f,  0.5f,  0.5f,     0.0f,  1.0f,  0.0f,     1.0f,  0.0f,
+        0.5f,  0.5f,  0.5f,     0.0f,  1.0f,  0.0f,     1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,    0.0f,  1.0f,  0.0f,     0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,    0.0f,  1.0f,  0.0f,     0.0f,  1.0f
+    };
+    
+    glm::vec3 cubePositions[] = {
+        glm::vec3(  0.0f,   0.0f,   0.0f),
+        glm::vec3(  2.0f,   5.0f,   -15.0f),
+        glm::vec3(  -1.5f,  -2.2f,  -2.5f),
+        glm::vec3(  -3.8f,  -2.0f,  -12.3f),
+        glm::vec3(  2.4f,   -0.4f,  -3.5f),
+        glm::vec3(  -1.7f,  3.0f,   -7.5f),
+        glm::vec3(  1.3f,   -2.0f,  -2.5f),
+        glm::vec3(  1.5f,   2.0f,   -2.5f),
+        glm::vec3(  1.5f,   0.2f,   -1.5f),
+        glm::vec3(  -1.3f,  1.0f,   -1.5f)
     };
     
     GLuint VBO, EBO;
@@ -145,12 +165,12 @@ int main( )
     GLuint VAO;
     glGenVertexArrays (1, &VAO);
     glBindVertexArray (VAO);
-    glVertexAttribPointer (0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid *)0);
+    glVertexAttribPointer (0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid *)0);
     glEnableVertexAttribArray (0);
-    glVertexAttribPointer (1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid *)(3 * sizeof( GLfloat )));
+    glVertexAttribPointer (1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid *)(3 * sizeof( GLfloat )));
     glEnableVertexAttribArray (1);
-    // glVertexAttribPointer (2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *)(3 * sizeof( GLfloat )));
-    // glEnableVertexAttribArray (2);
+    glVertexAttribPointer (2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid *)(6 * sizeof( GLfloat )));
+    glEnableVertexAttribArray (2);
     
     GLuint lightVAO;
     glGenVertexArrays (1, &lightVAO);
@@ -158,27 +178,56 @@ int main( )
     // We only need to bind to the VBO (to link it with glVertexAttribPointer), no need to fill it; the VBO's data already contains all we need.
     glBindBuffer( GL_ARRAY_BUFFER, VBO );
     // Set the vertex attributes (only position data for the lamp))
-    glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof( GLfloat ), ( GLvoid * )0 );
+    glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof( GLfloat ), ( GLvoid * )0 );
     glEnableVertexAttribArray( 0 );
     
     glBindVertexArray (0);
     
     // Load Texture
-//    GLuint texture;
-//    int width, height;
-//    glGenTextures (1, &texture);
-//    glBindTexture (GL_TEXTURE_2D, texture);
-//    
-//    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-//    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-//    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-//    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-//    
-//    unsigned char *image = SOIL_load_image( "resources/images/logo1.png", &width, &height, 0, SOIL_LOAD_RGBA );
-//    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image );
-//    glGenerateMipmap( GL_TEXTURE_2D );
-//    SOIL_free_image_data( image );
-//    glBindTexture( GL_TEXTURE_2D, 0 );
+    GLuint diffuseMap, specularMap;
+    glGenTextures( 1, &diffuseMap );
+    glGenTextures( 1, &specularMap );
+    
+    unsigned char *image;
+    int width, height;
+    
+    image = SOIL_load_image( "resources/images/container2.png", &width, &height, 0, SOIL_LOAD_RGB );
+    glBindTexture( GL_TEXTURE_2D, diffuseMap);
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image );
+    glGenerateMipmap( GL_TEXTURE_2D );
+    SOIL_free_image_data( image );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST );
+    
+    image = SOIL_load_image( "resources/images/container2_specular.png", &width, &height, 0, SOIL_LOAD_RGB );
+    glBindTexture( GL_TEXTURE_2D, specularMap);
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image );
+    glGenerateMipmap( GL_TEXTURE_2D );
+    SOIL_free_image_data( image );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST );
+    
+    glBindTexture( GL_TEXTURE_2D, 0);
+    
+    // Set texture units
+    lightingShader.Use( );
+    glUniform1i( glGetUniformLocation( lightingShader.Program, "material.diffuse" ),  0 );
+    glUniform1i( glGetUniformLocation( lightingShader.Program, "material.specular" ), 1 );
+    
+    glActiveTexture( GL_TEXTURE0 );
+    glBindTexture( GL_TEXTURE_2D, diffuseMap );
+    glActiveTexture( GL_TEXTURE1 );
+    glBindTexture( GL_TEXTURE_2D, specularMap );
+    
+    glm::mat4 projection;
+    // 3D camera
+    projection = glm::perspective( camera.GetZoom(), ( GLfloat )SCREEN_WIDTH / ( GLfloat )SCREEN_HEIGHT, 0.1f, 100.0f );
+    // 2D camera
+    // projection = glm::ortho(0.0f, ( GLfloat )SCREEN_WIDTH, 0.0f, ( GLfloat )SCREEN_HEIGHT, 0.1f, 1000.0f);
     
     // Game loop
     while ( !glfwWindowShouldClose( window ) )
@@ -193,42 +242,66 @@ int main( )
         
         // Render
         // Clear the colorbuffer
-        glClearColor( 0.2f, 0.3f, 0.3f, 1.0f );
+        glClearColor( 0.1f, 0.1f, 0.1f, 1.0f );
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         
-//        myShader.Use();
-//        glActiveTexture( GL_TEXTURE0 );
-//        glBindTexture( GL_TEXTURE_2D, texture );
-//        glUniform1i( glGetUniformLocation( myShader.Program, "myTexture" ), 0 );
-        
+        // rander boxes
         lightingShader.Use();
-        GLint lightPosLoc = glGetUniformLocation( lightingShader.Program, "light.position" );
         GLint viewPosLoc = glGetUniformLocation( lightingShader.Program, "viewPos" );
-        glUniform3f( lightPosLoc, lightPos.x, lightPos.y, lightPos.z );
         glUniform3f( viewPosLoc, camera.GetPosition( ).x, camera.GetPosition( ).y, camera.GetPosition( ).z );
-        
-        glm::vec3 lightColor;
-        lightColor.r = sin( glfwGetTime( ) * 2.0f );
-        lightColor.g = sin( glfwGetTime( ) * 0.7f );
-        lightColor.b = sin( glfwGetTime( ) * 1.3f );
-        glm::vec3 diffuseColor = lightColor * glm::vec3( 0.5f ); // Decrease the influence
-        glm::vec3 ambientColor = diffuseColor * glm::vec3( 0.2f ); // Low influence
-        glUniform3f( glGetUniformLocation( lightingShader.Program, "light.ambient" ), ambientColor.r, ambientColor.g, ambientColor.b );
-        glUniform3f( glGetUniformLocation( lightingShader.Program, "light.diffuse" ), diffuseColor.r, diffuseColor.g, diffuseColor.b);
-        glUniform3f( glGetUniformLocation( lightingShader.Program, "light.specular" ), 1.0f, 1.0f, 1.0f );
-        glUniform3f( glGetUniformLocation( lightingShader.Program, "material.ambient" ), 1.0f, 0.5f, 0.31f );
-        glUniform3f( glGetUniformLocation( lightingShader.Program, "material.diffuse"), 1.0f, 0.5f, 0.31f );
-        glUniform3f(glGetUniformLocation( lightingShader.Program, "material.specular" ), 0.5f, 0.5f, 0.5f );
         glUniform1f(glGetUniformLocation( lightingShader.Program, "material.shininess" ), 32.0f );
         
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "dirLight.direction" ), dirLightDir.x, dirLightDir.y, dirLightDir.z);
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "dirlight.ambient" ), 0.2f, 0.2f, 0.2f);
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "dirlight.diffuse" ), 0.8f, 0.8f, 0.8f);
+        
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "pointLights[0].position" ), pointLightPos[0].x, pointLightPos[0].y, pointLightPos[0].z );
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "pointLights[0].ambient" ), 0.05f, 0.05f, 0.05f );
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "pointLights[0].diffuse" ), 0.8f, 0.8f, 0.8f );
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "pointLights[0].specular" ), 1.0f, 1.0f, 1.0f );
+        glUniform1f( glGetUniformLocation( lightingShader.Program, "pointLights[0].constant" ), 1.0f );
+        glUniform1f( glGetUniformLocation( lightingShader.Program, "pointLights[0].linear" ), 0.09f );
+        glUniform1f( glGetUniformLocation( lightingShader.Program, "pointLights[0].quadratic" ), 0.032f );
+        
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "pointLights[1].position" ), pointLightPos[1].x, pointLightPos[1].y, pointLightPos[1].z );
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "pointLights[1].ambient" ), 0.05f, 0.05f, 0.05f );
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "pointLights[1].diffuse" ), 0.8f, 0.8f, 0.8f );
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "pointLights[1].specular" ), 1.0f, 1.0f, 1.0f );
+        glUniform1f( glGetUniformLocation( lightingShader.Program, "pointLights[1].constant" ), 1.0f );
+        glUniform1f( glGetUniformLocation( lightingShader.Program, "pointLights[1].linear" ), 0.09f );
+        glUniform1f( glGetUniformLocation( lightingShader.Program, "pointLights[1].quadratic" ), 0.032f );
+        
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "pointLights[2].position" ), pointLightPos[2].x, pointLightPos[2].y, pointLightPos[2].z );
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "pointLights[2].ambient" ), 0.05f, 0.05f, 0.05f );
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "pointLights[2].diffuse" ), 0.8f, 0.8f, 0.8f );
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "pointLights[2].specular" ), 1.0f, 1.0f, 1.0f );
+        glUniform1f( glGetUniformLocation( lightingShader.Program, "pointLights[2].constant" ), 1.0f );
+        glUniform1f( glGetUniformLocation( lightingShader.Program, "pointLights[2].linear" ), 0.09f );
+        glUniform1f( glGetUniformLocation( lightingShader.Program, "pointLights[2].quadratic" ), 0.032f );
+
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "pointLights[3].position" ), pointLightPos[3].x, pointLightPos[3].y, pointLightPos[3].z );
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "pointLights[3].ambient" ), 0.05f, 0.05f, 0.05f );
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "pointLights[3].diffuse" ), 0.8f, 0.8f, 0.8f );
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "pointLights[3].specular" ), 1.0f, 1.0f, 1.0f );
+        glUniform1f( glGetUniformLocation( lightingShader.Program, "pointLights[3].constant" ), 1.0f );
+        glUniform1f( glGetUniformLocation( lightingShader.Program, "pointLights[3].linear" ), 0.09f );
+        glUniform1f( glGetUniformLocation( lightingShader.Program, "pointLights[3].quadratic" ), 0.032f );
+        
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "spotLight.position" ), camera.GetPosition( ).x, camera.GetPosition( ).y, camera.GetPosition( ).z );
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "spotLight.direction" ), camera.GetFront( ).x, camera.GetFront( ).y, camera.GetFront( ).z );
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "spotLight.ambient" ), 0.0f, 0.0f, 0.0f );
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "spotLight.diffuse" ), 1.0f, 1.0f, 1.0f );
+        glUniform3f( glGetUniformLocation( lightingShader.Program, "spotLight.specular" ), 1.0f, 1.0f, 1.0f );
+        glUniform1f( glGetUniformLocation( lightingShader.Program, "spotLight.constant" ), 1.0f );
+        glUniform1f( glGetUniformLocation( lightingShader.Program, "spotLight.linear" ), 0.09f );
+        glUniform1f( glGetUniformLocation( lightingShader.Program, "spotLight.quadratic" ), 0.032f );
+        glUniform1f( glGetUniformLocation( lightingShader.Program, "spotLight.cutOff" ), glm::cos( glm::radians( 12.5f ) ) );
+        glUniform1f( glGetUniformLocation( lightingShader.Program, "spotLight.outerCutOff" ), glm::cos( glm::radians( 15.0f ) ) );
+        
         // Create transformations
-        glm::mat4 model, view, projection;
-        model = glm::rotate( model, ( GLfloat)glfwGetTime( ) * 1.0f, glm::vec3( 0.5f, 1.0f, 0.0f ) );
+        glm::mat4 model, view;
+        // model = glm::rotate( model, ( GLfloat)glfwGetTime( ) * 1.0f, glm::vec3( 0.5f, 1.0f, 0.0f ) );
         view = camera.GetViewMatrix ();
-        // 3D camera
-        projection = glm::perspective( camera.GetZoom(), ( GLfloat )SCREEN_WIDTH / ( GLfloat )SCREEN_HEIGHT, 0.1f, 100.0f );
-        // 2D camera
-        // projection = glm::ortho(0.0f, ( GLfloat )SCREEN_WIDTH, 0.0f, ( GLfloat )SCREEN_HEIGHT, 0.1f, 1000.0f);
         
         // Get their uniform location
         GLint modelLoc = glGetUniformLocation( lightingShader.Program, "model" );
@@ -239,27 +312,37 @@ int main( )
         glUniformMatrix4fv( viewLoc, 1, GL_FALSE, glm::value_ptr( view ) );
         glUniformMatrix4fv( projLoc, 1, GL_FALSE, glm::value_ptr( projection ) );
         
-        // glBindVertexArray (VAO);
         glBindVertexArray (VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
         // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        // glDrawArrays(GL_TRIANGLES, 0, 36);
+        for ( GLuint i = 0; i < 10; i++ )
+        {
+            model = glm::mat4( );
+            model = glm::translate( model, cubePositions[i] );
+            model = glm::rotate( model, 20.0f * i, glm::vec3( 1.0f, 0.3f, 0.5f ) );
+            glUniformMatrix4fv( modelLoc, 1, GL_FALSE, glm::value_ptr( model ) );
+            
+            glDrawArrays( GL_TRIANGLES, 0, 36 );
+        }
         glBindVertexArray (0);
         
+        // render lamp
         lampShader.Use( );
         modelLoc = glGetUniformLocation( lampShader.Program, "model" );
         viewLoc = glGetUniformLocation( lampShader.Program, "view" );
         projLoc = glGetUniformLocation( lampShader.Program, "projection" );
         
-        model = glm::mat4( );
-        model = glm::translate( model, lightPos );
-        model = glm::scale( model, glm::vec3( 0.2f ) );
-        
-        glUniformMatrix4fv( modelLoc, 1, GL_FALSE, glm::value_ptr( model ) );
         glUniformMatrix4fv( viewLoc, 1, GL_FALSE, glm::value_ptr( view ) );
         glUniformMatrix4fv( projLoc, 1, GL_FALSE, glm::value_ptr( projection ) );
         
         glBindVertexArray( lightVAO );
-        glDrawArrays( GL_TRIANGLES, 0, 36 );
+        for (int i = 0; i < 4; i++) {
+            model = glm::mat4();
+            model = glm::translate( model, pointLightPos[i] );
+            model = glm::scale( model, glm::vec3( 0.2f ) );
+            glUniformMatrix4fv( modelLoc, 1, GL_FALSE, glm::value_ptr( model ) );
+            glDrawArrays( GL_TRIANGLES, 0, 36 );
+        }
         glBindVertexArray( 0 );
         
         // Swap the screen buffers
