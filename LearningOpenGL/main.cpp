@@ -11,6 +11,7 @@
 
 #include "shader.h"
 #include "camera.h"
+#include "Model.h"
 
 const GLint WIDTH = 800, HEIGHT = 600;
 int SCREEN_WIDTH, SCREEN_HEIGHT;
@@ -89,7 +90,6 @@ int main( )
     // enable alpha support
     glEnable (GL_BLEND);
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    
     glEnable( GL_DEPTH_TEST );
     
     // Shader myShader ("resources/shaders/core.vert", "resources/shaders/core.frag");
@@ -215,12 +215,12 @@ int main( )
     
     // Set texture units
     lightingShader.Use( );
-    glUniform1i( glGetUniformLocation( lightingShader.Program, "material.diffuse" ),  0 );
-    glUniform1i( glGetUniformLocation( lightingShader.Program, "material.specular" ), 1 );
+    glUniform1i( glGetUniformLocation( lightingShader.Program, "material.diffuse" ),  10 );
+    glUniform1i( glGetUniformLocation( lightingShader.Program, "material.specular" ), 11 );
     
-    glActiveTexture( GL_TEXTURE0 );
+    glActiveTexture( GL_TEXTURE10 );
     glBindTexture( GL_TEXTURE_2D, diffuseMap );
-    glActiveTexture( GL_TEXTURE1 );
+    glActiveTexture( GL_TEXTURE11 );
     glBindTexture( GL_TEXTURE_2D, specularMap );
     
     glm::mat4 projection;
@@ -228,6 +228,11 @@ int main( )
     projection = glm::perspective( camera.GetZoom(), ( GLfloat )SCREEN_WIDTH / ( GLfloat )SCREEN_HEIGHT, 0.1f, 100.0f );
     // 2D camera
     // projection = glm::ortho(0.0f, ( GLfloat )SCREEN_WIDTH, 0.0f, ( GLfloat )SCREEN_HEIGHT, 0.1f, 1000.0f);
+    
+    // Load models
+    Shader modelShader( "resources/shaders/model.vert", "resources/shaders/model.frag" );
+    Model loadedModel( "resources/models/nanosuit.obj" );
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     
     // Game loop
     while ( !glfwWindowShouldClose( window ) )
@@ -325,7 +330,7 @@ int main( )
             glDrawArrays( GL_TRIANGLES, 0, 36 );
         }
         glBindVertexArray (0);
-        
+
         // render lamp
         lampShader.Use( );
         modelLoc = glGetUniformLocation( lampShader.Program, "model" );
@@ -344,6 +349,42 @@ int main( )
             glDrawArrays( GL_TRIANGLES, 0, 36 );
         }
         glBindVertexArray( 0 );
+        
+        // Draw the loaded model
+        modelShader.Use();
+        viewPosLoc = glGetUniformLocation( modelShader.Program, "viewPos" );
+        glUniform3f( viewPosLoc, camera.GetPosition( ).x, camera.GetPosition( ).y, camera.GetPosition( ).z );
+        
+        glUniform3f( glGetUniformLocation( modelShader.Program, "dirLight.direction" ), dirLightDir.x, dirLightDir.y, dirLightDir.z);
+        glUniform3f( glGetUniformLocation( modelShader.Program, "dirlight.ambient" ), 0.2f, 0.2f, 0.2f);
+        glUniform3f( glGetUniformLocation( modelShader.Program, "dirlight.diffuse" ), 0.8f, 0.8f, 0.8f);
+        
+        glUniform3f( glGetUniformLocation( modelShader.Program, "pointLight.position" ), pointLightPos[0].x, pointLightPos[0].y, pointLightPos[0].z );
+        glUniform3f( glGetUniformLocation( modelShader.Program, "pointLight.ambient" ), 0.05f, 0.05f, 0.05f );
+        glUniform3f( glGetUniformLocation( modelShader.Program, "pointLight.diffuse" ), 0.8f, 0.8f, 0.8f );
+        glUniform3f( glGetUniformLocation( modelShader.Program, "pointLight.specular" ), 1.0f, 1.0f, 1.0f );
+        glUniform1f( glGetUniformLocation( modelShader.Program, "pointLight.constant" ), 1.0f );
+        glUniform1f( glGetUniformLocation( modelShader.Program, "pointLight.linear" ), 0.09f );
+        glUniform1f( glGetUniformLocation( modelShader.Program, "pointLight.quadratic" ), 0.032f );
+        
+        glUniform3f( glGetUniformLocation( modelShader.Program, "spotLight.position" ), camera.GetPosition( ).x, camera.GetPosition( ).y, camera.GetPosition( ).z );
+        glUniform3f( glGetUniformLocation( modelShader.Program, "spotLight.direction" ), camera.GetFront( ).x, camera.GetFront( ).y, camera.GetFront( ).z );
+        glUniform3f( glGetUniformLocation( modelShader.Program, "spotLight.ambient" ), 0.0f, 0.0f, 0.0f );
+        glUniform3f( glGetUniformLocation( modelShader.Program, "spotLight.diffuse" ), 1.0f, 1.0f, 1.0f );
+        glUniform3f( glGetUniformLocation( modelShader.Program, "spotLight.specular" ), 1.0f, 1.0f, 1.0f );
+        glUniform1f( glGetUniformLocation( modelShader.Program, "spotLight.constant" ), 1.0f );
+        glUniform1f( glGetUniformLocation( modelShader.Program, "spotLight.linear" ), 0.09f );
+        glUniform1f( glGetUniformLocation( modelShader.Program, "spotLight.quadratic" ), 0.032f );
+        glUniform1f( glGetUniformLocation( modelShader.Program, "spotLight.cutOff" ), glm::cos( glm::radians( 12.5f ) ) );
+        glUniform1f( glGetUniformLocation( modelShader.Program, "spotLight.outerCutOff" ), glm::cos( glm::radians( 15.0f ) ) );
+        
+        model = glm::mat4();
+        model = glm::translate( model, glm::vec3( 2.0f, -1.75f, 1.0f ) );
+        model = glm::scale( model, glm::vec3( 0.2f, 0.2f, 0.2f ) );
+        glUniformMatrix4fv( glGetUniformLocation( modelShader.Program, "model" ), 1, GL_FALSE, glm::value_ptr( model ) );
+        glUniformMatrix4fv( glGetUniformLocation( modelShader.Program, "view" ), 1, GL_FALSE, glm::value_ptr( view ) );
+        glUniformMatrix4fv( glGetUniformLocation( modelShader.Program, "projection" ), 1, GL_FALSE, glm::value_ptr( projection ) );
+        loadedModel.Draw(modelShader);
         
         // Swap the screen buffers
         glfwSwapBuffers( window );

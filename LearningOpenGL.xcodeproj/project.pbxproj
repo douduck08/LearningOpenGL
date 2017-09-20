@@ -16,6 +16,7 @@
 		77B8D4BF1F6C4A9000D8E800 /* image_helper.c in Sources */ = {isa = PBXBuildFile; fileRef = 77B8D4AC1F6C4A9000D8E800 /* image_helper.c */; };
 		77B8D4C01F6C4A9000D8E800 /* SOIL2.c in Sources */ = {isa = PBXBuildFile; fileRef = 77B8D4B11F6C4A9000D8E800 /* SOIL2.c */; };
 		77B8D4C11F6C4AD700D8E800 /* resources in CopyFiles */ = {isa = PBXBuildFile; fileRef = 77B8D4A01F6C27EC00D8E800 /* resources */; };
+		77B8D7061F72E04B00D8E800 /* libassimp.4.0.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 77B8D7051F72E04B00D8E800 /* libassimp.4.0.1.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -328,6 +329,9 @@
 		77B8D6D01F6D80F300D8E800 /* vec4.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = vec4.hpp; sourceTree = "<group>"; };
 		77B8D6D11F6D80F300D8E800 /* vector_relational.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = vector_relational.hpp; sourceTree = "<group>"; };
 		77B8D6D21F6DA61400D8E800 /* camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = camera.h; sourceTree = "<group>"; };
+		77B8D6D31F72CEA600D8E800 /* mesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mesh.h; sourceTree = "<group>"; };
+		77B8D7051F72E04B00D8E800 /* libassimp.4.0.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.4.0.1.dylib; path = ../../../../usr/local/Cellar/assimp/4.0.1/lib/libassimp.4.0.1.dylib; sourceTree = "<group>"; };
+		77B8D7071F72E10000D8E800 /* model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -335,6 +339,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				77B8D7061F72E04B00D8E800 /* libassimp.4.0.1.dylib in Frameworks */,
 				77B8D4971F6BC62000D8E800 /* libglfw.3.2.dylib in Frameworks */,
 				77B8D4951F6BC60200D8E800 /* libGLEW.2.1.0.dylib in Frameworks */,
 				77B8D4931F6BC57A00D8E800 /* OpenGL.framework in Frameworks */,
@@ -367,7 +372,9 @@
 				77B8D4A71F6C4A7B00D8E800 /* SOIL2 */,
 				77B8D4A01F6C27EC00D8E800 /* resources */,
 				77B8D48A1F6BC49F00D8E800 /* main.cpp */,
+				77B8D6D31F72CEA600D8E800 /* mesh.h */,
 				77B8D49A1F6C01DF00D8E800 /* shader.h */,
+				77B8D7071F72E10000D8E800 /* model.h */,
 				77B8D6D21F6DA61400D8E800 /* camera.h */,
 			);
 			path = LearningOpenGL;
@@ -376,6 +383,7 @@
 		77B8D4911F6BC57A00D8E800 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				77B8D7051F72E04B00D8E800 /* libassimp.4.0.1.dylib */,
 				77B8D5CB1F6D80F200D8E800 /* glm */,
 				77B8D4961F6BC62000D8E800 /* libglfw.3.2.dylib */,
 				77B8D4941F6BC60200D8E800 /* libGLEW.2.1.0.dylib */,
@@ -879,6 +887,7 @@
 					"$(inherited)",
 					/usr/local/Cellar/glew/2.1.0/lib,
 					/usr/local/Cellar/glfw/3.2.1/lib,
+					/usr/local/Cellar/assimp/4.0.1/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -894,6 +903,7 @@
 					"$(inherited)",
 					/usr/local/Cellar/glew/2.1.0/lib,
 					/usr/local/Cellar/glfw/3.2.1/lib,
+					/usr/local/Cellar/assimp/4.0.1/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
