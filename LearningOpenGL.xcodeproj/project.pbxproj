@@ -42,6 +42,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7725B2A51F73AF1D00252616 /* texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = texture.h; sourceTree = "<group>"; };
 		77B8D4871F6BC49F00D8E800 /* LearningOpenGL */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = LearningOpenGL; sourceTree = BUILT_PRODUCTS_DIR; };
 		77B8D48A1F6BC49F00D8E800 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		77B8D4921F6BC57A00D8E800 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -374,6 +375,7 @@
 				77B8D48A1F6BC49F00D8E800 /* main.cpp */,
 				77B8D6D31F72CEA600D8E800 /* mesh.h */,
 				77B8D49A1F6C01DF00D8E800 /* shader.h */,
+				7725B2A51F73AF1D00252616 /* texture.h */,
 				77B8D7071F72E10000D8E800 /* model.h */,
 				77B8D6D21F6DA61400D8E800 /* camera.h */,
 			);
@@ -928,6 +930,7 @@
 				77B8D4901F6BC49F00D8E800 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

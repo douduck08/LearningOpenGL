@@ -11,7 +11,8 @@
 
 #include "shader.h"
 #include "camera.h"
-#include "Model.h"
+#include "model.h"
+#include "texture.h"
 
 const GLint WIDTH = 800, HEIGHT = 600;
 int SCREEN_WIDTH, SCREEN_HEIGHT;
@@ -88,13 +89,14 @@ int main( )
     glViewport( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
     
     // enable alpha support
-    glEnable (GL_BLEND);
-    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // glEnable (GL_BLEND);
+    // glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable( GL_DEPTH_TEST );
     
     // Shader myShader ("resources/shaders/core.vert", "resources/shaders/core.frag");
     Shader lightingShader( "resources/shaders/lighting.vert", "resources/shaders/lighting.frag" );
     Shader lampShader( "resources/shaders/lamp.vert", "resources/shaders/lamp.frag" );
+    Shader skyboxShader( "resources/shaders/skybox.vert", "resources/shaders/skybox.frag" );
     
     GLfloat vertices[] = {
         // Positions            // Normals              // Texture Coords
@@ -154,6 +156,51 @@ int main( )
         glm::vec3(  -1.3f,  1.0f,   -1.5f)
     };
     
+    GLfloat skyboxVertices[] = {
+        // Positions
+        -1.0f,  1.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+        1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+        
+        -1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
+        
+        1.0f, -1.0f, -1.0f,
+        1.0f, -1.0f,  1.0f,
+        1.0f,  1.0f,  1.0f,
+        1.0f,  1.0f,  1.0f,
+        1.0f,  1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+        
+        -1.0f, -1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
+        1.0f,  1.0f,  1.0f,
+        1.0f,  1.0f,  1.0f,
+        1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
+        
+        -1.0f,  1.0f, -1.0f,
+        1.0f,  1.0f, -1.0f,
+        1.0f,  1.0f,  1.0f,
+        1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f, -1.0f,
+        
+        -1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f,  1.0f,
+        1.0f, -1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f,  1.0f,
+        1.0f, -1.0f,  1.0f
+    };
+    
     GLuint VBO, EBO;
     glGenBuffers (1, &VBO);
     // glGenBuffers (1, &EBO);
@@ -181,47 +228,29 @@ int main( )
     glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof( GLfloat ), ( GLvoid * )0 );
     glEnableVertexAttribArray( 0 );
     
+    GLuint skyboxVAO, skyboxVBO;
+    glGenVertexArrays( 1, &skyboxVAO );
+    glGenBuffers( 1, &skyboxVBO );
+    glBindVertexArray( skyboxVAO );
+    glBindBuffer( GL_ARRAY_BUFFER, skyboxVBO );
+    glBufferData( GL_ARRAY_BUFFER, sizeof( skyboxVertices ), &skyboxVertices, GL_STATIC_DRAW );
+    glEnableVertexAttribArray( 0 );
+    glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof( GLfloat ), ( GLvoid * ) 0 );
+    
     glBindVertexArray (0);
     
     // Load Texture
-    GLuint diffuseMap, specularMap;
-    glGenTextures( 1, &diffuseMap );
-    glGenTextures( 1, &specularMap );
+    GLuint cubeDiffuseMap = TextureLoading::LoadTexture( "resources/images/container2.png" );
+    GLuint cubeSpecularMap = TextureLoading::LoadTexture( "resources/images/container2_specular.png" );
     
-    unsigned char *image;
-    int width, height;
-    
-    image = SOIL_load_image( "resources/images/container2.png", &width, &height, 0, SOIL_LOAD_RGB );
-    glBindTexture( GL_TEXTURE_2D, diffuseMap);
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image );
-    glGenerateMipmap( GL_TEXTURE_2D );
-    SOIL_free_image_data( image );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST );
-    
-    image = SOIL_load_image( "resources/images/container2_specular.png", &width, &height, 0, SOIL_LOAD_RGB );
-    glBindTexture( GL_TEXTURE_2D, specularMap);
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image );
-    glGenerateMipmap( GL_TEXTURE_2D );
-    SOIL_free_image_data( image );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST );
-    
-    glBindTexture( GL_TEXTURE_2D, 0);
-    
-    // Set texture units
-    lightingShader.Use( );
-    glUniform1i( glGetUniformLocation( lightingShader.Program, "material.diffuse" ),  10 );
-    glUniform1i( glGetUniformLocation( lightingShader.Program, "material.specular" ), 11 );
-    
-    glActiveTexture( GL_TEXTURE10 );
-    glBindTexture( GL_TEXTURE_2D, diffuseMap );
-    glActiveTexture( GL_TEXTURE11 );
-    glBindTexture( GL_TEXTURE_2D, specularMap );
+    vector<const GLchar*> faces;
+    faces.push_back( "resources/images/skybox/right.tga" );
+    faces.push_back( "resources/images/skybox/left.tga" );
+    faces.push_back( "resources/images/skybox/top.tga" );
+    faces.push_back( "resources/images/skybox/bottom.tga" );
+    faces.push_back( "resources/images/skybox/back.tga" );
+    faces.push_back( "resources/images/skybox/front.tga" );
+    GLuint cubemapTexture = TextureLoading::LoadCubemap( faces );
     
     glm::mat4 projection;
     // 3D camera
@@ -317,6 +346,14 @@ int main( )
         glUniformMatrix4fv( viewLoc, 1, GL_FALSE, glm::value_ptr( view ) );
         glUniformMatrix4fv( projLoc, 1, GL_FALSE, glm::value_ptr( projection ) );
         
+        // Set texture units
+        glUniform1i( glGetUniformLocation( lightingShader.Program, "material.diffuse" ),  0 );
+        glUniform1i( glGetUniformLocation( lightingShader.Program, "material.specular" ), 1 );
+        glActiveTexture( GL_TEXTURE0 );
+        glBindTexture( GL_TEXTURE_2D, cubeDiffuseMap );
+        glActiveTexture( GL_TEXTURE1 );
+        glBindTexture( GL_TEXTURE_2D, cubeSpecularMap );
+        
         glBindVertexArray (VAO);
         // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         // glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -330,6 +367,11 @@ int main( )
             glDrawArrays( GL_TRIANGLES, 0, 36 );
         }
         glBindVertexArray (0);
+        
+        glActiveTexture( GL_TEXTURE0 );
+        glBindTexture( GL_TEXTURE_2D, 0 );
+        glActiveTexture( GL_TEXTURE1 );
+        glBindTexture( GL_TEXTURE_2D, 0 );
 
         // render lamp
         lampShader.Use( );
@@ -385,6 +427,19 @@ int main( )
         glUniformMatrix4fv( glGetUniformLocation( modelShader.Program, "view" ), 1, GL_FALSE, glm::value_ptr( view ) );
         glUniformMatrix4fv( glGetUniformLocation( modelShader.Program, "projection" ), 1, GL_FALSE, glm::value_ptr( projection ) );
         loadedModel.Draw(modelShader);
+        
+        // Draw skybox as last
+        glDepthFunc( GL_LEQUAL );  // Change depth function so depth test passes when values are equal to depth buffer's content
+        skyboxShader.Use( );
+        view = glm::mat4( glm::mat3( camera.GetViewMatrix( ) ) );	// Remove any translation component of the view matrix
+        glUniformMatrix4fv( glGetUniformLocation( skyboxShader.Program, "view" ), 1, GL_FALSE, glm::value_ptr( view ) );
+        glUniformMatrix4fv( glGetUniformLocation( skyboxShader.Program, "projection" ), 1, GL_FALSE, glm::value_ptr( projection ) );
+        
+        glBindVertexArray( skyboxVAO );
+        glBindTexture( GL_TEXTURE_CUBE_MAP, cubemapTexture );
+        glDrawArrays( GL_TRIANGLES, 0, 36 );
+        glBindVertexArray( 0 );
+        glDepthFunc( GL_LESS ); // Set depth function back to default
         
         // Swap the screen buffers
         glfwSwapBuffers( window );
